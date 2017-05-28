@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "bloomfilter.h"
 #include <QApplication>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -9,7 +10,13 @@ int main(int argc, char *argv[])
     w.show();
 
 
-    BloomFilter( 1000, 5 );
+    BloomFilter bf = BloomFilter( 10, 2 );
 
-    return a.exec();
+    bf.addElement( "Dan" );
+    qDebug() << bf.testElement("Dan");
+    qDebug() << bf.testElement("LLd");
+
+
+
+    //return a.exec();
 }

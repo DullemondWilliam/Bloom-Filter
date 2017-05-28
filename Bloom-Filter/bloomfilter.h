@@ -2,6 +2,7 @@
 #define BLOOMFILTER_H
 
 #include <QList>
+#include <QDebug>
 #include <QByteArray>
 #include <QCryptographicHash>
 
@@ -11,20 +12,17 @@ class BloomFilter
         BloomFilter( int numBits, int numHash );
         ~BloomFilter();
 
-        bool testElement( QString add );
+        bool testElement( QString test );
         bool addElement( QString add );
 
     private:
         int bitToCheck( int a, QByteArray array );
 
         QByteArray m_byteArray;
-        QList<QByteArray> m_saltArray;
 
         int m_numBits;
         int m_numHash;
         int m_numElements;
-
-        double m_totalSize;
         double m_sectionSize;
 };
 
