@@ -8,22 +8,27 @@
 
 class BloomFilter
 {
-    public:
-        BloomFilter( int numBits, int numHash );
-        ~BloomFilter();
+public:
+    BloomFilter( int numBits, int numHash );
+    ~BloomFilter();
 
-        bool testElement( QString test );
-        bool addElement( QString add );
+    bool testElement( QString test );
+    bool addElement( QString add );
 
-    private:
-        int bitToCheck( int a, QByteArray array );
+    bool checkBit( int bit);
+    void setBit( int bit );
 
-        QByteArray m_byteArray;
+    QByteArray xorByteArray( QByteArray a1, QByteArray a2 );
 
-        int m_numBits;
-        int m_numHash;
-        int m_numElements;
-        double m_sectionSize;
+private:
+
+    QVector<char> m_filter;
+    QVector<QByteArray> m_hashSeeds;
+
+    int m_numBits;
+    int m_numHash;
+    int m_numElements;
+    double m_sectionSize;
 };
 
 #endif // BLOOMFILTER_H

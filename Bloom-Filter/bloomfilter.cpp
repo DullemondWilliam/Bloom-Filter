@@ -1,14 +1,24 @@
 #include "bloomfilter.h"
 #include "math.h"
 #include <QDebug>
-
+#include <qmath.h>
 BloomFilter::BloomFilter( int numBits, int numHash ):
     m_numBits( numBits ),
     m_numHash( numHash ),
     m_numElements( 0 )
 {
-    m_byteArray = QByteArray( ceil( (double)m_numBits/8.0 ), 0 );
-    m_sectionSize = floor(  pow( 2, m_numBits ) / m_numHash );
+    qInfo() << " Number of Storage bits: " << m_numBits;
+    qInfo() << " Number of Hash bits: " << m_numHash;
+
+    m_filter = QVector<char>( ceil( (double) m_numBits/8.0 ), 0 );
+
+    //Create K Hashes Seeds
+    QByteArray seed;
+    for( int i=0; i < m_numHash; ++i )
+    {
+       m_hashSeeds.append(QCryptographicHash::hash( seed.setNum( i ), QCryptographicHash::Md4 ) );
+       qDebug() << m_hashSeeds.last();
+    }
 }
 
 BloomFilter::~BloomFilter()
@@ -17,22 +27,20 @@ BloomFilter::~BloomFilter()
 
 bool BloomFilter::testElement( QString test )
 {
+    // Hash Element
     QByteArray elementHash = QCryptographicHash::hash( test.toLocal8Bit(), QCryptographicHash::Md4 );
 
+    // Create K hashes
     for( int i=0; i < m_numHash; ++i )
     {
-        int bit = bitToCheck( i, elementHash );
-        qDebug() << bit;
-        bit = bit % 8;
-        char bitMask = pow( 2, bit );
-        int section = floor( ((double)bit)/8.0 );
+       // Create seeded Hash
+       QByteArray seededhash = xorByteArray( elementHash, m_hashSeeds[i] );
 
-        char element = m_byteArray.at( section );
+       // Convert to a number between 0 - numBits
+       // Determine most number of bits
+       int a = qLn( m_numBits ) / qLn( 2 );
 
-        if( !(element & bitMask) )
-        {
-            return false;
-        }
+
     }
     return true;
 }
@@ -43,26 +51,40 @@ bool BloomFilter::addElement( QString add )
 
     for( int i=0; i < m_numHash; ++i )
     {
-        int bit = bitToCheck( i, elementHash );
+        int bit ;//= checkBit\( i, elementHash );
         bit = bit % 8;
         char bitMask = pow( 2, bit );
         int section = floor( ((double)bit)/8.0 );
 
-        char element = m_byteArray.at( section );
+        char element = m_filter.at( section );
         element = element | bitMask;
-        m_byteArray.insert( i, element );
+        m_filter.insert( i, element );
     }
     return true;
 }
 
-int BloomFilter::bitToCheck( int hashNumber, QByteArray array )
+bool BloomFilter::checkBit( int bit )
 {
-    QByteArray finalValue;
+    int byteNumber = bit / 8;
+    int bitNumber = bit % 8;
 
-    for( char i=0; i < array.length(); ++i )
-    {
-        finalValue.append( array.at( i ) ^ i );
-    }
-
-    return floor( finalValue.toDouble() / m_sectionSize );
+    return (m_filter[ byteNumber] & bitNumber);
 }
+
+void BloomFilter::setBit( int bit )
+{
+    int byteNumber = bit / 8;
+    int bitNumber = bit % 8;
+
+    m_filter[ byteNumber] = (m_filter[ byteNumber] | bitNumber);
+}
+
+QByteArray BloomFilter::xorByteArray( QByteArray a1, QByteArray a2 )
+{
+    for( int i=0; i < qMin( a1.length(), a2.length() ); ++i )
+    {
+        a1[i] = (a1[i] ^ a2[i]);
+    }
+    return a1;
+}
+
