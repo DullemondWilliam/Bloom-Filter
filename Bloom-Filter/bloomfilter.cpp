@@ -10,7 +10,7 @@ BloomFilter::BloomFilter( int numBits, int numHash ):
     qInfo() << " Number of Storage bits: " << m_numBits;
     qInfo() << " Number of Hash bits: " << m_numHash;
 
-    m_filter = QVector<char>( ceil( (double) m_numBits/8.0 ), 0 );
+    m_filter = QByteArray( ceil( (double) m_numBits/8.0 ), 0 );
 
     //Create K Hashes Seeds
     QByteArray seed;
@@ -38,7 +38,9 @@ bool BloomFilter::testElement( QString test )
 
        // Convert to a number between 0 - numBits
        // Determine most number of bits
-       int a = qLn( m_numBits ) / qLn( 2 );
+       int a = qLn( m_numBits+1 ) / qLn( 2 );
+
+
 
 
     }
@@ -88,3 +90,7 @@ QByteArray BloomFilter::xorByteArray( QByteArray a1, QByteArray a2 )
     return a1;
 }
 
+QByteArray BloomFilter::hashToNumber( QByteArray a1 )
+{
+
+}

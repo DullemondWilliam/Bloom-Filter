@@ -19,10 +19,11 @@ public:
     void setBit( int bit );
 
     QByteArray xorByteArray( QByteArray a1, QByteArray a2 );
+    QByteArray hashToNumber( QByteArray a1 );
 
 private:
 
-    QVector<char> m_filter;
+    QByteArray m_filter;
     QVector<QByteArray> m_hashSeeds;
 
     int m_numBits;
