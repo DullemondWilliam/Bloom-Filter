@@ -4,6 +4,7 @@
 #include <QList>
 #include <QDebug>
 #include <QByteArray>
+#include <QBitArray>
 #include <QCryptographicHash>
 
 class BloomFilter
@@ -15,15 +16,12 @@ public:
     bool testElement( QString test );
     bool addElement( QString add );
 
-    bool checkBit( int bit);
-    void setBit( int bit );
-
     QByteArray xorByteArray( QByteArray a1, QByteArray a2 );
-    QByteArray hashToNumber( QByteArray a1 );
+    double hashToNumber( QByteArray a1 );
 
 private:
 
-    QByteArray m_filter;
+    QBitArray m_filter;
     QVector<QByteArray> m_hashSeeds;
 
     int m_numBits;
