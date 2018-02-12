@@ -3,6 +3,12 @@
 #include <QDebug>
 #include <qmath.h>
 #include "bitset"
+
+namespace
+{
+    const int numberOfBits = 16;
+}
+
 BloomFilter::BloomFilter( int numBits, int numHash ):
     m_numBits( numBits ),
     m_numHash( numHash ),
@@ -18,7 +24,6 @@ BloomFilter::BloomFilter( int numBits, int numHash ):
     for( int i=0; i < m_numHash; ++i )
     {
         m_hashSeeds.append(QCryptographicHash::hash( seed.setNum( i ), QCryptographicHash::Md4 ) );
-        qDebug() << m_hashSeeds.last();
     }
 }
 
@@ -37,12 +42,16 @@ bool BloomFilter::testElement( QString test )
         // Create seeded Hash
         QByteArray seededhash = xorByteArray( elementHash, m_hashSeeds[i] );
 
+        // Hash Number
+        qint64 num = hashToNumber( seededhash );
+
         // Convert to a number between 0 - numBits
-        // Determine most number of bits
-        int a = qLn( m_numBits+1 ) / qLn( 2 );
+        double fraction = m_numBits / qPow(2,numberOfBits); // 2^48
 
+        fraction *= num;
 
-
+        if( !m_filter.at( qFloor( fraction ) ) )
+            return false;
 
     }
     return true;
@@ -50,43 +59,57 @@ bool BloomFilter::testElement( QString test )
 
 bool BloomFilter::addElement( QString add )
 {
+    // Hash Element
     QByteArray elementHash = QCryptographicHash::hash( add.toLocal8Bit(), QCryptographicHash::Md4 );
 
+    // Create K hashes
     for( int i=0; i < m_numHash; ++i )
     {
-        int bit ;//= checkBit\( i, elementHash );
-        bit = bit % 8;
-        char bitMask = pow( 2, bit );
-        int section = floor( ((double)bit)/8.0 );
+        // Create seeded Hash
+        QByteArray seededhash = xorByteArray( elementHash, m_hashSeeds[i] );
 
-//        char element = m_filter.at( section );
-//        element = element | bitMask;
-//        m_filter.insert( i, element );
+        // Hash Number
+        qint64 num = hashToNumber( seededhash );
+
+        // Convert to a number between 0 - numBits
+        double fraction = m_numBits / qPow(2,numberOfBits); // 2^48
+
+        fraction *= num;
+
+        m_filter.setBit( ( qFloor( fraction ) ) );
     }
     return true;
 }
 
-QByteArray BloomFilter::xorByteArray( QByteArray a1, QByteArray a2 )
+QByteArray BloomFilter::xorByteArray( const QByteArray& a1, const QByteArray& a2 )
 {
+    QByteArray array ( a1 );
     for( int i=0; i < qMin( a1.length(), a2.length() ); ++i )
-    {
-        a1[i] = (a1[i] ^ a2[i]);
-    }
+        array[i] = array[i] ^ a2[i];
 
-    return a1;
+    return array;
 }
 
-double BloomFilter::hashToNumber( QByteArray a1 )
+quint64 BloomFilter::hashToNumber( const QByteArray& a1 )
 {
-    double number = 0;
-    for(int i=0; i<a1.length(); ++i)
-    {
-        double num = 0;
-        num += ((unsigned char) a1.at( i )) * qPow(2,(8*i));
-        number += num;
-        qDebug() << fixed<< number << " ____ " << (unsigned char) a1.at( i ) << "_____" << num;
-    }
+    //Note: number is capped at 64 bits
+    quint64 number = 0;
+
+    for(int i=0; i<a1.length() && i<numberOfBits/8; ++i)
+        number += ((unsigned char) a1.at( i )) * qPow(2,(8*i));
 
     return number;
+}
+
+void BloomFilter::printFilter()
+{
+    for( int i=m_numBits-1 ; i >= 0 ; --i )
+    {
+        if( m_filter.at( i ) )
+            printf( "1" );
+        else
+            printf( "0" );
+    }
+    printf( "\n" );
 }
 

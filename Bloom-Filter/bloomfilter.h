@@ -16,8 +16,9 @@ public:
     bool testElement( QString test );
     bool addElement( QString add );
 
-    QByteArray xorByteArray( QByteArray a1, QByteArray a2 );
-    double hashToNumber( QByteArray a1 );
+    QByteArray xorByteArray( const QByteArray& a1, const QByteArray& a2 );
+    quint64 hashToNumber( const QByteArray& a1 );
+    void  printFilter();
 
 private:
 

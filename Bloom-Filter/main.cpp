@@ -7,39 +7,22 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+
+    BloomFilter bf = BloomFilter( 2000, 2 );
 
 
-    BloomFilter bf = BloomFilter( 64, 2 );
+    bf.addElement( "123456789" );
+    bf.addElement( "12" );
 
-    qDebug()<< sizeof(long long);
+    for( int i=0; i<500; ++i )
+        bf.addElement( QString::number(i) );
 
-//    bf.setBit( 10 );
-//    bf.setBit( 60 );
-//    bf.setBit( 21 );
-//    bf.setBit( 40 );
+    qDebug() << bf.testElement( "123456789" );
+    qDebug() << bf.testElement( "123456789" );
 
-//    qDebug() << bf.checkBit( 9 );
-//    qDebug() << bf.checkBit( 60 );
-//    qDebug() << bf.checkBit( 21 );
-//    qDebug() << bf.checkBit( 55 );
+    qDebug() << bf.testElement( "abcdefghi" );
 
-//    qDebug() << QCryptographicHash::hash( "Information3", QCryptographicHash::Md4 );
-//    qDebug() << QCryptographicHash::hash( "Information3", QCryptographicHash::Md4 );
-//    qDebug() << QCryptographicHash::hash( "Informa1tion3", QCryptographicHash::Md4 );
+//    bf.printFilter();
 
-
-
-   // qDebug() << bf.hashToNumber( QCryptographicHash::hash( "Information3", QCryptographicHash::Md4 ) );
-    //qDebug() << bf.hashToNumber( QCryptographicHash::hash( "Information2", QCryptographicHash::Md4 ) );
-    qDebug() << bf.hashToNumber( QCryptographicHash::hash( "Information1", QCryptographicHash::Md4 ) );
-
-//    bf.addElement( "Dan" );
-//    qDebug() << bf.testElement("Dan");
-//    qDebug() << bf.testElement("LLd");
-
-
-
-    //return a.exec();
+    return a.exec();
 }
