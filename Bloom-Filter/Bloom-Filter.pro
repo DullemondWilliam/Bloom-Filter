@@ -25,9 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    bloomfilter.cpp
+    bloomfilter.cpp \
+    countBloomfilter.cpp \
+    csvbuilder.cpp \
+    MurmurHash3.cpp
 
 HEADERS  += mainwindow.h \
-    bloomfilter.h
+    bloomfilter.h \
+    countBloomfilter.h \
+    csvbuilder.h \
+    MurmurHash3.h
 
 FORMS    += mainwindow.ui

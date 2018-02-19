@@ -1,28 +1,112 @@
 #include "mainwindow.h"
+#include "CountBloomFilter.h"
 #include "bloomfilter.h"
+#include "csvbuilder.h"
+#include "MurmurHash3.h"
+
 #include <QApplication>
 #include <QDebug>
 #include <QtMath>
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    BloomFilter bf = BloomFilter( 2000, 2 );
+
+    uint32_t result1;
+    uint32_t result2;
+    char* result3 = (char*) malloc( 16 );
+
+    QString t("test");
+
+    char* test1 = "test1";
+    char* test = "test";
+
+    qDebug() << result1 << " =+= " << result2;
+
+//    qDebug() << result1;
+    MurmurHash3_x86_128( test1,5,12, &result1);
+    MurmurHash3_x86_128( test,4,12, &result2);
+
+    qDebug() << result1 << " =+= " << result2;
+
+    CSVBuilder builder;
+
+    int numberOfColumns = 50;
+    int numberOfRows    = 100;
+
+    int N_elements = 1;
+    int M_bits     = 1;
+    int K_hashes   = 1;
+
+    int N_MAX_elements = 1000000;
+    int M_MAX_bits     = 10000;
+    int K_MAX_hashes   = 100;
+    ///////////////////////////////////////////////////////////////////////////
+    // "False positive rate over N where N=1,000,000 M=50,000 and K as a fraction of M",
+    // N = 1,000,000 M = 50,000 K = [1-M]
+
+    //    N_elements = 1;
+    //    M_bits     = 1;
+    //    K_hashes   = 1;
+
+    //    for( int i=1; i<=numberOfColumns; ++i ) //Number of columns (different values of K)
+    //    {
+    //        BloomFilter bf( 50000, (i / 50.0) * 50000  );
+    //        QVector<double> column;
+    //        double errors = 0;
+    //        for( int j=0; j< numberOfRows; ++j ) //Number of rows (fraction of N)
+    //        {
+    //            for( int a=0; a<1000; ++a)
+    //            {
+    //                if( bf.addElement( QString::number( j*1000 + a ) ) )
+    //                    errors++;
+    //            }
+    //            column.append( errors );
+    //            qDebug() << errors;
+    //        }
+    //        builder.insertColomn( i * (1.0/50.0), column );
+    //    }
+
+    //    builder.printToFile( "C:\\Users\\William\\Desktop\\K_to_Error.csv",
+    //                         "False positive rate over N where N=1,000,000 M=50,000 and K as a fraction of M",
+    //                         "Number of Hashes(K)", "Number of Elements", 1000, 1000000 );
+    //    builder.clear();
+    ///////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////////
+    // [N,M] "False positive rate over N, N=1,000,000 K as a set fraction of M, M being a fraction of N",
+    // N = 1-1,000,000 M =1-1000 K = (M/N)ln2
+
+    //    QVector<QPair<double>> M_K [ QPair<double>( )];
+
+    //    for( int i=1; i<=50; ++i ) //Number of columns (different values of K)
+    //    {
+    //        BloomFilter bf( 50000, 50000 );
+    //        QVector<double> column;
+    //        double errors = 0;
+    //        for( int j=0; j<1000000/1000; ++j ) //Number of rows (fraction of N)
+    //        {
+    //            for( int a=0; a<1000; ++a)
+    //            {
+    //                if( bf.addElement( QString::number( j*1000 + a ) ) )
+    //                    errors++;
+    //            }
+    //            column.append( errors );
+    //            qDebug() << errors;
+    //        }
+    //        builder.insertColomn( i * (1.0/50.0), column );
+    //    }
+
+    //    builder.printToFile( "C:\\Users\\William\\Desktop\\K_to_Error.csv",
+    //                         "False positive rate over N, N=1,000,000 K as a set fraction of M, M being a fraction of N",
+    //                         "Number of Bits(K)", "Number of Elements", 1000, 1000000 );
+    //    builder.clear();
+    ///////////////////////////////////////////////////////////////////////////
 
 
-    bf.addElement( "123456789" );
-    bf.addElement( "12" );
 
-    for( int i=0; i<500; ++i )
-        bf.addElement( QString::number(i) );
-
-    qDebug() << bf.testElement( "123456789" );
-    qDebug() << bf.testElement( "123456789" );
-
-    qDebug() << bf.testElement( "abcdefghi" );
-
-//    bf.printFilter();
-
+    qDebug() << "end";
     return a.exec();
 }

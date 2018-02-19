@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.1
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -102,13 +102,13 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
-        groupBox->setTitle(QApplication::translate("MainWindow", "GroupBox", Q_NULLPTR));
-        label_4->setText(QApplication::translate("MainWindow", "Collison Prob", Q_NULLPTR));
-        label_3->setText(QApplication::translate("MainWindow", "Estamated Elements ", Q_NULLPTR));
-        label_2->setText(QApplication::translate("MainWindow", "Number of Hashes", Q_NULLPTR));
-        label->setText(QApplication::translate("MainWindow", "Number of Bits", Q_NULLPTR));
-        button_Compute->setText(QApplication::translate("MainWindow", "Calculate", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        groupBox->setTitle(QApplication::translate("MainWindow", "GroupBox", 0));
+        label_4->setText(QApplication::translate("MainWindow", "Collison Prob", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Estamated Elements ", 0));
+        label_2->setText(QApplication::translate("MainWindow", "Number of Hashes", 0));
+        label->setText(QApplication::translate("MainWindow", "Number of Bits", 0));
+        button_Compute->setText(QApplication::translate("MainWindow", "Calculate", 0));
     } // retranslateUi
 
 };

@@ -3,10 +3,11 @@
 #include <QDebug>
 #include <qmath.h>
 #include "bitset"
+#include "MurmurHash3.h"
 
 namespace
 {
-    const int numberOfBits = 16;
+const int numberOfBits = 56; // 4 294 967 296
 }
 
 BloomFilter::BloomFilter( int numBits, int numHash ):
@@ -59,6 +60,8 @@ bool BloomFilter::testElement( QString test )
 
 bool BloomFilter::addElement( QString add )
 {
+    bool out = true;
+
     // Hash Element
     QByteArray elementHash = QCryptographicHash::hash( add.toLocal8Bit(), QCryptographicHash::Md4 );
 
@@ -76,10 +79,22 @@ bool BloomFilter::addElement( QString add )
 
         fraction *= num;
 
+        if( m_filter.testBit( ( qFloor( fraction ) ) ) )
+            out = false;
+
         m_filter.setBit( ( qFloor( fraction ) ) );
     }
-    return true;
+    return out;
 }
+
+//uint32 stringToHash( QString str )
+//{
+//    QByteArray arr = str.toLocal8Bit();
+//    for( int i=0; i < arr.size(); ++i )
+//    {
+//       // MurmurHash3_x86_32(  arr.at( i ), );
+//    }
+//}
 
 QByteArray BloomFilter::xorByteArray( const QByteArray& a1, const QByteArray& a2 )
 {
