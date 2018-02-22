@@ -7,7 +7,7 @@
 
 namespace
 {
-const int numberOfBits = 56; // 4 294 967 296
+const int numberOfBits = 32; // 4 294 967 296
 }
 
 BloomFilter::BloomFilter( int numBits, int numHash ):
@@ -20,81 +20,59 @@ BloomFilter::BloomFilter( int numBits, int numHash ):
 
     m_filter = QBitArray( m_numBits, 0 );
 
-    //Create K Hashes Seeds
-    QByteArray seed;
-    for( int i=0; i < m_numHash; ++i )
-    {
-        m_hashSeeds.append(QCryptographicHash::hash( seed.setNum( i ), QCryptographicHash::Md4 ) );
-    }
+    m_fraction = m_numBits / qPow (2,numberOfBits);
+//    //Create K Hashes Seeds
+//    QByteArray seed;
+//    for( int i=0; i < m_numHash; ++i )
+//    {
+//        m_hashSeeds.append(QCryptographicHash::hash( seed.setNum( i ), QCryptographicHash::Md4 ) );
+//    }
 }
 
 BloomFilter::~BloomFilter()
 {
 }
 
-bool BloomFilter::testElement( QString test )
+bool BloomFilter::testElement( const QString& test )
 {
-    // Hash Element
-    QByteArray elementHash = QCryptographicHash::hash( test.toLocal8Bit(), QCryptographicHash::Md4 );
+    uint32_t num;
 
     // Create K hashes
     for( int i=0; i < m_numHash; ++i )
     {
-        // Create seeded Hash
-        QByteArray seededhash = xorByteArray( elementHash, m_hashSeeds[i] );
+        MurmurHash3_x86_32( test.toLocal8Bit().data(), test.size(), i, &num );
 
-        // Hash Number
-        qint64 num = hashToNumber( seededhash );
+        double index = m_fraction * num;
 
-        // Convert to a number between 0 - numBits
-        double fraction = m_numBits / qPow(2,numberOfBits); // 2^48
-
-        fraction *= num;
-
-        if( !m_filter.at( qFloor( fraction ) ) )
+        if( !m_filter.at( qFloor( index ) ) )
             return false;
 
     }
     return true;
 }
 
-bool BloomFilter::addElement( QString add )
+bool BloomFilter::addElement( const QString& add )
 {
-    bool out = true;
-
-    // Hash Element
-    QByteArray elementHash = QCryptographicHash::hash( add.toLocal8Bit(), QCryptographicHash::Md4 );
+    bool included = true;
+    uint32_t num;
 
     // Create K hashes
     for( int i=0; i < m_numHash; ++i )
     {
-        // Create seeded Hash
-        QByteArray seededhash = xorByteArray( elementHash, m_hashSeeds[i] );
+        MurmurHash3_x86_32( add.toLocal8Bit().data(), add.size(), i, &num );
 
-        // Hash Number
-        qint64 num = hashToNumber( seededhash );
+        uint32_t index = qFloor( m_fraction * num );
 
-        // Convert to a number between 0 - numBits
-        double fraction = m_numBits / qPow(2,numberOfBits); // 2^48
+      //  qDebug() << index;
 
-        fraction *= num;
-
-        if( m_filter.testBit( ( qFloor( fraction ) ) ) )
-            out = false;
-
-        m_filter.setBit( ( qFloor( fraction ) ) );
+        if( !m_filter.at( index  ) )
+        {
+            m_filter.setBit( index );
+            included = false;
+        }
     }
-    return out;
+    return included;
 }
-
-//uint32 stringToHash( QString str )
-//{
-//    QByteArray arr = str.toLocal8Bit();
-//    for( int i=0; i < arr.size(); ++i )
-//    {
-//       // MurmurHash3_x86_32(  arr.at( i ), );
-//    }
-//}
 
 QByteArray BloomFilter::xorByteArray( const QByteArray& a1, const QByteArray& a2 )
 {

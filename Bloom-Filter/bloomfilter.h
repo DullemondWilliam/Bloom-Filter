@@ -13,8 +13,8 @@ public:
     BloomFilter( int numBits, int numHash );
     ~BloomFilter();
 
-    bool testElement( QString test );
-    bool addElement( QString add );
+    bool testElement( const QString& test );
+    bool addElement( const QString& add );
 
     QByteArray xorByteArray( const QByteArray& a1, const QByteArray& a2 );
     quint64 hashToNumber( const QByteArray& a1 );
@@ -28,7 +28,10 @@ private:
     int m_numBits;
     int m_numHash;
     int m_numElements;
+
     double m_sectionSize;
+    double m_fraction;
+
 };
 
 #endif // BLOOMFILTER_H

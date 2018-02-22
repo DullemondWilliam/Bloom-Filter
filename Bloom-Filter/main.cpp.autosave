@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         uint64_t error = 0;
         for( int i=0; i<1000000; ++i )
         {
-            if( bf.addElement( QString::number( i )))
+            if( bf.add Element( QString::number( i )))
                 error ++;
 
             if( !(i % 100000))

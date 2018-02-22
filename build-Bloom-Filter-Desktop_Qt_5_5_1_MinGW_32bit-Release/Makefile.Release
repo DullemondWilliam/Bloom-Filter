@@ -614,7 +614,8 @@ release/bloomfilter.o: ../Bloom-Filter/bloomfilter.cpp ../Bloom-Filter/bloomfilt
 		C:/Qt/5.5/mingw492_32/include/QtCore/qbitarray.h \
 		C:/Qt/5.5/mingw492_32/include/QtCore/QCryptographicHash \
 		C:/Qt/5.5/mingw492_32/include/QtCore/qcryptographichash.h \
-		C:/Qt/5.5/mingw492_32/include/QtCore/qmath.h
+		C:/Qt/5.5/mingw492_32/include/QtCore/qmath.h \
+		../Bloom-Filter/MurmurHash3.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\bloomfilter.o ..\Bloom-Filter\bloomfilter.cpp
 
 release/countBloomfilter.o: ../Bloom-Filter/countBloomfilter.cpp ../Bloom-Filter/CountBloomFilter.h \
