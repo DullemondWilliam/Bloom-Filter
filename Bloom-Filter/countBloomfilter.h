@@ -6,6 +6,7 @@
 #include <QByteArray>
 #include <QBitArray>
 #include <QCryptographicHash>
+#include "MurmurHash3.h"
 
 class CountBloomFilter
 {
@@ -29,7 +30,9 @@ private:
     int m_numBits;
     int m_numHash;
     int m_numElements;
+
     double m_sectionSize;
+    double m_fraction;
 };
 
 #endif // COUNTBLOOMFILTER_H

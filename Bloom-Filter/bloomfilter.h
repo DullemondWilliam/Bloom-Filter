@@ -20,8 +20,6 @@ public:
     quint64 hashToNumber( const QByteArray& a1 );
     void  printFilter();
 
-private:
-
     QBitArray m_filter;
     QVector<QByteArray> m_hashSeeds;
 

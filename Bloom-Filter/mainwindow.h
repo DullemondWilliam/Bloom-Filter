@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "bloomfilter.h"
+#include "QTimer"
+#include "QImage"
 
 namespace Ui {
 class MainWindow;
@@ -17,8 +20,12 @@ public:
 
     void setProbCollision( float prob );
 
+    void startBloomFilter( int bits, int hashes, int elements );
+
 public slots:
     void on_button_Compute_clicked();
+
+    void timerFire();
 
 private:
     Ui::MainWindow *ui;
@@ -26,6 +33,15 @@ private:
     int numBits;
     int numHashed;
     int numElements;
+
+    int m_imageWidth;
+    QImage* m_image;
+
+    QTimer* m_timer;
+    BloomFilter* m_bloomFilter;
+
+
+
 };
 
 #endif // MAINWINDOW_H

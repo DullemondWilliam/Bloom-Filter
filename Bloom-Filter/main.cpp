@@ -13,22 +13,29 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    for( int j = 1; j<500; ++j )
-    {
-        BloomFilter bf(10000000 , j);
+    MainWindow w;
+    w.show();
 
-        uint64_t error = 0;
-        for( int i=0; i<1000000; ++i )
-        {
-            if( bf.addElement( QString::number( i )))
-                error ++;
+    qDebug() << "end";
+    return a.exec();
 
-            if( !(i % 100000))
-                qDebug() << "   " << i << " - " << error;
-        }
 
-        qDebug() << j << "-" << error;
-    }
+//    for( int j = 2; j<500; ++j )
+//    {
+//        CountBloomFilter bf(10000000 , j);
+
+//        uint64_t error = 0;
+//        for( int i=0; i<1000000; ++i )
+//        {
+//            if( bf.addElement( QString::number( i ) ) )
+//                error ++;
+
+//            if( !(i % 100000))
+//                qDebug() << "   " << i << " - " << error;
+//        }
+
+//        qDebug() << j << "-" << error;
+//    }
 
 
     //    uint32_t result1;
@@ -48,18 +55,18 @@ int main(int argc, char *argv[])
 
     //    qDebug() << result1 << " =+= " << result2;
 
-    CSVBuilder builder;
+//    CSVBuilder builder;
 
-    int numberOfColumns = 50;
-    int numberOfRows    = 100;
+//    int numberOfColumns = 50;
+//    int numberOfRows    = 100;
 
-    int N_elements = 1;
-    int M_bits     = 1;
-    int K_hashes   = 1;
+//    int N_elements = 1;
+//    int M_bits     = 1;
+//    int K_hashes   = 1;
 
-    int N_MAX_elements = 1000000;
-    int M_MAX_bits     = 10000;
-    int K_MAX_hashes   = 100;
+//    int N_MAX_elements = 1000000;
+//    int M_MAX_bits     = 10000;
+//    int K_MAX_hashes   = 100;
     ///////////////////////////////////////////////////////////////////////////
     // "False positive rate over N where N=1,000,000 M=50,000 and K as a fraction of M",
     // N = 1,000,000 M = 50,000 K = [1-M]
@@ -124,6 +131,5 @@ int main(int argc, char *argv[])
 
 
 
-    qDebug() << "end";
-    //return a.exec();
+
 }
