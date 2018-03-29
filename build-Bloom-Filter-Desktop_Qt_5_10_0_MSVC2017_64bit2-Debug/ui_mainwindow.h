@@ -42,6 +42,8 @@ public:
     QLabel *label;
     QPushButton *button_Compute;
     QLabel *Label;
+    QLabel *label_5;
+    QLineEdit *text_Collisions;
     QFrame *frame;
     QLabel *label_ui;
     QMenuBar *menuBar;
@@ -52,12 +54,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(400, 300);
+        MainWindow->resize(631, 587);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(0, 0, 131, 241));
+        groupBox->setGeometry(QRect(0, 0, 131, 531));
         text_NumBits = new QLineEdit(groupBox);
         text_NumBits->setObjectName(QStringLiteral("text_NumBits"));
         text_NumBits->setGeometry(QRect(10, 30, 113, 20));
@@ -90,18 +92,26 @@ public:
         Label = new QLabel(groupBox);
         Label->setObjectName(QStringLiteral("Label"));
         Label->setGeometry(QRect(140, 20, 241, 211));
+        label_5 = new QLabel(groupBox);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setGeometry(QRect(10, 240, 71, 16));
+        text_Collisions = new QLineEdit(groupBox);
+        text_Collisions->setObjectName(QStringLiteral("text_Collisions"));
+        text_Collisions->setGeometry(QRect(10, 260, 113, 20));
+        text_Collisions->setFrame(true);
+        text_Collisions->setReadOnly(true);
         frame = new QFrame(centralWidget);
         frame->setObjectName(QStringLiteral("frame"));
-        frame->setGeometry(QRect(140, 20, 241, 221));
+        frame->setGeometry(QRect(140, 20, 481, 521));
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
         label_ui = new QLabel(frame);
         label_ui->setObjectName(QStringLiteral("label_ui"));
-        label_ui->setGeometry(QRect(10, 10, 221, 201));
+        label_ui->setGeometry(QRect(10, 10, 461, 491));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 20));
+        menuBar->setGeometry(QRect(0, 0, 631, 20));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -125,6 +135,7 @@ public:
         label->setText(QApplication::translate("MainWindow", "Number of Bits", nullptr));
         button_Compute->setText(QApplication::translate("MainWindow", "Calculate", nullptr));
         Label->setText(QString());
+        label_5->setText(QApplication::translate("MainWindow", "Actual Collisions", nullptr));
         label_ui->setText(QString());
     } // retranslateUi
 

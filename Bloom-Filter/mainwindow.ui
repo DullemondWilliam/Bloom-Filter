@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>631</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>131</width>
-      <height>241</height>
+      <height>531</height>
      </rect>
     </property>
     <property name="title">
@@ -150,14 +150,43 @@
       <string/>
      </property>
     </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>240</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Actual Collisions</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="text_Collisions">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>260</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
       <x>140</x>
       <y>20</y>
-      <width>241</width>
-      <height>221</height>
+      <width>481</width>
+      <height>521</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -171,8 +200,8 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>221</width>
-       <height>201</height>
+       <width>461</width>
+       <height>491</height>
       </rect>
      </property>
      <property name="text">
@@ -186,7 +215,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>631</width>
      <height>20</height>
     </rect>
    </property>

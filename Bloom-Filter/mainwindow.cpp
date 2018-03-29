@@ -12,25 +12,17 @@ MainWindow::MainWindow(QWidget *parent) :
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerFire()));
 
-    int numofBits = 2000000;
-
-    QImage myImage;
-    myImage.load("C:\\Users\\William\\Documents\\Bloom-Filter\\Bloom-Filter\\photo.png");
-    //ui->label_ui->setPixmap(QPixmap::fromImage(myImage));
-
     QIntValidator val;
     val.setBottom(0);
     ui->text_NumBits->setValidator( &val );
 
-    ui->text_NumBits->setText("250");
+    ui->text_NumBits->setText("100000");
     ui->text_NumHashes->setText("4");
-    ui->text_Elements->setText("100");
+    ui->text_Elements->setText("100000");
 
-    m_image = new QImage(50,100, QImage::Format_RGB32 );
-    m_image->fill(255);
+    m_image = new QImage(ui->frame->width(),ui->frame->height(), QImage::Format_RGB32 );
+    m_image->fill(QColor("yellow"));
     ui->label_ui->setPixmap(QPixmap::fromImage(*m_image));
-
-
 }
 
 MainWindow::~MainWindow()
@@ -54,19 +46,16 @@ void MainWindow::on_button_Compute_clicked()
 void MainWindow::timerFire()
 {
 
-    for(int i=0; i<m_bloomFilter->m_numBits; ++i)
+    for(int i=0; i<m_bloomFilter->m_numBits && i<(m_image->width()*m_image->height()); ++i)
     {
         int x = i % m_image->width();
         int y = i / m_image->width();
 
-        qDebug()<< i << " : "<< x << " Timer Fire " << y;
-
-       // m_image->setPixel( x, y, 1 );
-        m_image->setPixelColor( x, y, 1 );
-
+        if( m_bloomFilter->m_filter.at(i) )
+            m_image->setPixelColor( x, y, 1 );
+        else
+            m_image->setPixelColor( x, y, QColor("yellow") );
     }
-    //m_image->fill(0);
-
     ui->label_ui->setPixmap(QPixmap::fromImage(*m_image));
 }
 
@@ -79,20 +68,26 @@ void MainWindow::setProbCollision( float prob )
 
 void MainWindow::startBloomFilter( int bits, int hashes, int elements )
 {
-    m_timer->setInterval(1000);
-   // m_timer->start();
+    m_image = new QImage(ui->frame->width(),ui->frame->height(), QImage::Format_ARGB32 );
+    m_image->fill(255);
+
+    // m_timer->setInterval(1000);
+    // m_timer->start();
+
     m_bloomFilter = new BloomFilter( bits, hashes );
 
-    m_image->fill(255);
-    //ui->label_ui->setPixmap(QPixmap::fromImage(*m_image));
+    m_image->fill(QColor(0,0,0,0));
+    ui->label_ui->setPixmap(QPixmap::fromImage(*m_image));
 
+    int collisions = 0;
     for(int i=0; i<elements; ++i)
     {
-        m_bloomFilter->addElement( QString::number(i) );
+        collisions += m_bloomFilter->addElement( QString::number(i) );
     }
 
+    ui->text_Collisions->setText( QString::number(collisions) + " : (" +
+                                  QString::number(((float)collisions/(float)elements)*100) + "%)" );
     timerFire();
-    ui->label_ui->setPixmap(QPixmap::fromImage(*m_image));
 
     qDebug() << "DONE";
     //m_timer->stop();
