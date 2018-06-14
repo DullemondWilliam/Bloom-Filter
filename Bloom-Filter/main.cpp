@@ -1,8 +1,8 @@
 #include "mainwindow.h"
-#include "CountBloomFilter.h"
 #include "bloomfilter.h"
 #include "csvbuilder.h"
 #include "MurmurHash3.h"
+#include "StorageManager.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -11,14 +11,27 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
 
-    MainWindow w;
-    w.show();
+    BloomFilter bloomFilter(10000, 3);
 
-    qDebug() << "end";
-    return a.exec();
+    for(int i=0; i<1000; ++i)
+        bloomFilter.addElement(QString::number(i));
 
+    bloomFilter.writeToFile("/home/tcu001/Desktop/BloomFilter.bf");
+
+
+    bloomFilter.readFromFile("/home/tcu001/Desktop/BloomFilter.bf");
+
+
+//    QApplication a(argc, argv);
+
+//    MainWindow w;
+//    w.show();
+
+//    qDebug() << "end";
+//    return a.exec();
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 //    for( int j = 2; j<500; ++j )
 //    {

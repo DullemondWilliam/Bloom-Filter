@@ -19,6 +19,8 @@ public:
     QByteArray xorByteArray( const QByteArray& a1, const QByteArray& a2 );
     quint64 hashToNumber( const QByteArray& a1 );
     void  printFilter();
+    bool writeToFile( const QString& filename );
+    bool readFromFile( const QString& filename );
 
     QBitArray m_filter;
     QVector<QByteArray> m_hashSeeds;

@@ -12,6 +12,7 @@ public:
     bool printToFile( QString fileName, QString Description, QString xaxis, QString yaxis, double minEntry, double maxEntry );
 
     void clear();
+
 private:
     double m_minEntry;
     double m_maxEntry;

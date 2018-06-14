@@ -4,6 +4,7 @@
 #include <qmath.h>
 #include "bitset"
 #include "MurmurHash3.h"
+#include "StorageManager.h"
 
 namespace
 {
@@ -11,10 +12,11 @@ const int numberOfBits = 32; // 4 294 967 296
 }
 
 BloomFilter::BloomFilter( int numBits, int numHash ):
-    m_numBits( numBits ),
     m_numHash( numHash ),
     m_numElements( 0 )
 {
+    m_numBits = numBits + (numBits % 8);
+
     qInfo() << " Number of Storage bits: " << m_numBits;
     qInfo() << " Number of Hash bits: " << m_numHash;
 
@@ -57,8 +59,6 @@ bool BloomFilter::addElement( const QString& add )
 
         uint32_t index = qFloor( m_fraction * num );
 
-      //  qDebug() << index;
-
         if( !m_filter.at( index  ) )
         {
             m_filter.setBit( index );
@@ -80,3 +80,12 @@ void BloomFilter::printFilter()
     printf( "\n" );
 }
 
+bool BloomFilter::writeToFile( const QString& filename )
+{
+    StorageManager::saveToFile( StorageManager::bitToByte(m_filter), filename );
+}
+
+bool BloomFilter::readFromFile( const QString& filename )
+{
+    m_filter = StorageManager::byteToBit( StorageManager::readFromFile( filename ) );
+}

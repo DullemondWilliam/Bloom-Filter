@@ -1,8 +1,9 @@
-#include "CountBloomFilter.h"
 #include "math.h"
 #include <QDebug>
 #include <qmath.h>
 #include "bitset"
+#include "countBloomfilter.h"
+#include "StorageManager.h"
 
 namespace
 {
@@ -93,3 +94,12 @@ void CountBloomFilter::printFilter()
     qDebug() << out;
 }
 
+bool CountBloomFilter::writeToFile( const QString& filename )
+{
+    StorageManager::saveToFile( m_filter, filename );
+}
+
+bool CountBloomFilter::readFromFile( const QString& filename )
+{
+    m_filter = StorageManager::readFromFile( filename );
+}

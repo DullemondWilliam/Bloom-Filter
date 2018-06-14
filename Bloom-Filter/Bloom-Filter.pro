@@ -28,12 +28,16 @@ SOURCES += main.cpp\
     bloomfilter.cpp \
     countBloomfilter.cpp \
     csvbuilder.cpp \
-    MurmurHash3.cpp
+    MurmurHash3.cpp \
+    StorageManager.cpp \
+    Server.cpp
 
 HEADERS  += mainwindow.h \
     bloomfilter.h \
     countBloomfilter.h \
     csvbuilder.h \
-    MurmurHash3.h
+    MurmurHash3.h \
+    StorageManager.h \
+    Server.h
 
 FORMS    += mainwindow.ui
